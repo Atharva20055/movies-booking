@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Ticket Booking</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 1rem;
+            text-align: center;
+            position: relative;
+        }
+        .menu {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        .menu a {
+            color: #fff;
+            margin-left: 15px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .menu a:hover {
+            text-decoration: underline;
+        }
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            padding: 20px;
+        }
+        .movie-card {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            margin: 15px;
+            width: 250px;
+            text-align: center;
+            overflow: hidden;
+        }
+        .movie-card img {
+            width: 100%;
+            height: 350px;
+            object-fit: cover;
+        }
+        .movie-card h3 {
+            margin: 10px 0;
+        }
+        .movie-card button {
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+            padding: 10px;
+            width: 100%;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .movie-card button:hover {
+            background-color: #218838;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        .modal-content input {
+            width: 50%;
+            padding: 8px;
+            margin: 10px 0;
+        }
+        .close-btn {
+            background-color: #dc3545;
+            color: #fff;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+        }
+        .close-btn:hover {
+            background-color: #c82333;
+        }
+        .celebration {
+            font-size: 50px;
+        }
+        .thank-you {
+            margin-top: 10px;
+            font-weight: bold;
+            color: #28a745;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Movie Ticket Booking</h1>
+        <div class="menu">
+            <a href="#contact">Contact</a>
+            <a href="https://www.youtube.com/@65atharvarathod8" target="_blank">ATHARVA WEB</a>
+            <a href="#history">History</a>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="movie-card">
+            <img src="https://th-i.thgim.com/public/entertainment/movies/mx9cz9/article67641384.ece/alternates/LANDSCAPE_1200/F8bGBrZWMAAiuq_.jpeg" alt="Movie 1">
+            <h3>Movie Title 1</h3>
+            <button onclick="openModal('Movie Title 1')">Book Now</button>
+        </div>
+
+        <div class="movie-card">
+            <img src="https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/mcdpadm-ec014-1545858433.jpg?crop=0.747xw:0.886xh;0.147xw,0.0989xh&resize=1200:*" alt="Movie 2">
+            <h3>Movie Title 2</h3>
+            <button onclick="openModal('Movie Title 2')">Book Now</button>
+        </div>
+
+        <div class="movie-card">
+            <img src="https://wallpapercave.com/wp/wp7157514.jpg" alt="Movie 3">
+            <h3>Movie Title 3</h3>
+            <button onclick="openModal('Movie Title 3')">Book Now</button>
+        </div>
+    </div>
+
+    <div id="bookingModal" class="modal">
+        <div class="modal-content">
+            <h2 id="modalTitle"></h2>
+            <label for="personCount">Number of Persons:</label>
+            <input type="number" id="personCount" min="1" value="1">
+            <p>Total Price: $<span id="totalPrice">10</span></p>
+            <button onclick="proceedToPayment()">Proceed to Payment</button>
+            <button class="close-btn" onclick="closeModal()">Close</button>
+        </div>
+    </div>
+
+    <div id="paymentModal" class="modal">
+        <div class="modal-content">
+            <h2>Payment</h2>
+            <p>Enter your payment details:</p>
+            <input type="text" placeholder="Card Number">
+            <input type="text" placeholder="Expiry Date">
+            <input type="text" placeholder="CVV">
+            <button onclick="confirmPayment()">Pay Now</button>
+            <button class="close-btn" onclick="closePaymentModal()">Cancel</button>
+        </div>
+    </div>
+
+    <div id="successModal" class="modal">
+        <div class="modal-content">
+            <h2>Success! 🎉</h2>
+            <div class="celebration">🥳🎊🎈</div>
+            <p>Your booking has been successfully completed.</p>
+            <p class="thank-you">Thank you for booking from ATHARVA BOOK WEB!</p>
+            <button onclick="closeSuccessModal()">Close</button>
+        </div>
+    </div>
+
+    <script>
+        const ticketPrice = 10;
+
+        function openModal(movieTitle) {
+            document.getElementById('modalTitle').innerText = `Booking for ${movieTitle}`;
+            document.getElementById('personCount').value = 1;
+            document.getElementById('totalPrice').innerText = ticketPrice;
+            document.getElementById('bookingModal').style.display = 'flex';
+        }
+
+        document.getElementById('personCount').addEventListener('input', function() {
+            const count = this.value;
+            document.getElementById('totalPrice').innerText = ticketPrice * count;
+        });
+
+        function closeModal() {
+            document.getElementById('bookingModal').style.display = 'none';
+        }
+
+        function proceedToPayment() {
+            document.getElementById('bookingModal').style.display = 'none';
+            document.getElementById('paymentModal').style.display = 'flex';
+        }
+
+        function closePaymentModal() {
+            document.getElementById('paymentModal').style.display = 'none';
+        }
+
+        function confirmPayment() {
+            document.getElementById('paymentModal').style.display = 'none';
+            document.getElementById('successModal').style.display = 'flex';
+        }
+
+        function closeSuccessModal() {
+            document.getElementById('successModal').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
